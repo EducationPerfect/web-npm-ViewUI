@@ -191,6 +191,12 @@ export declare class Table extends Vue {
      * 清除高亮项，仅在开启 highlight-row 时可用
      */
     clearCurrentRow(): void;
+
+    handleFilterSelect(_index: number, value: any): void;
+
+    selectAll(status: boolean): void;
+
+    toggleSelect(_index: any): void;
     /**
      * slot插槽对象
      */
@@ -312,7 +318,7 @@ export declare class TableColumn {
     /**
      * 数据过滤使用的方法，如果是多选的筛选项，对每一条数据会执行多次，任意一次返回 true 就会显示
      */
-    filterMethod?: () => void;
+    filterMethod?: (value: any, row: object) => void;
     /**
      * 数据过滤的选项是否多选
      * @default true
