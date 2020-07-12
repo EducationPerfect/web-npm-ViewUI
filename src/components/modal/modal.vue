@@ -316,6 +316,9 @@
             handleMoveMove (event) {
                 if (!this.dragData.dragging) return false;
 
+                const $content = this.$refs.content;
+                const rect = $content.getBoundingClientRect();
+
                 const distance = {
                     x: event.clientX,
                     y: event.clientY
@@ -327,7 +330,12 @@
                 };
 
                 this.dragData.x += diff_distance.x;
+                this.dragData.x = Math.max(this.dragData.x, 0);
+                this.dragData.x = Math.min(this.dragData.x, window.innerWidth - rect.width);
+
                 this.dragData.y += diff_distance.y;
+                this.dragData.y = Math.max(this.dragData.y, 0);
+                this.dragData.y = Math.min(this.dragData.y, window.innerHeight - rect.height);
 
                 this.dragData.dragX = distance.x;
                 this.dragData.dragY = distance.y;
