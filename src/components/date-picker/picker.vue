@@ -27,7 +27,7 @@
                     @mouseenter.native="handleInputMouseenter"
                     @mouseleave.native="handleInputMouseleave"
                 >
-                    <Icon @click="handleIconClick" :type="arrowType" :custom="customArrowType" :size="arrowSize" slot="suffix" />
+                    <Icon @click="handleIconClick" :type="arrowType" :custom="customArrowType" :size="arrowSize" :slot="iconSlot" />
                 </i-input>
             </slot>
         </div>
@@ -220,6 +220,10 @@
                 default () {
                     return !this.$IVIEW ? true : this.$IVIEW.capture;
                 }
+            },
+            iconSlot: {
+                type: String,
+                default: 'suffix'
             }
         },
         data(){
