@@ -334,8 +334,8 @@
                 this.dragData.x = Math.min(this.dragData.x, window.innerWidth - rect.width);
 
                 this.dragData.y += diff_distance.y;
-                this.dragData.y = Math.max(this.dragData.y, 0);
                 this.dragData.y = Math.min(this.dragData.y, window.innerHeight - rect.height);
+                this.dragData.y = Math.max(this.dragData.y, 0);
 
                 this.dragData.dragX = distance.x;
                 this.dragData.dragY = distance.y;
