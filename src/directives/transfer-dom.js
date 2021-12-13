@@ -1,22 +1,83 @@
 // Thanks to: https://github.com/airyland/vux/blob/v2/src/directives/transfer-dom/index.js
 // Thanks to: https://github.com/calebroseland/vue-dom-portal
 
+import { nanoid } from "nanoid";
+import Vue from "vue";
+
+function createMfePortalElement(guid) {
+    const mfeKey = Vue.prototype.$mfeKey;
+    const portalId = getMfePortalId(guid);
+    if (!mfeKey || !portalId) {
+        return null;
+    }
+
+    const newPortal = document.createElement("div");
+    newPortal.id = portalId;
+    newPortal.classList = [mfeKey];
+    document.body.appendChild(newPortal);
+
+    return newPortal;
+}
+
+function getMfePortalElement(guid) {
+    const portalId = getMfePortalId(guid);
+    return document.getElementById(portalId)
+}
+
+function getMfePortalId(guid) {
+    const mfeKey = Vue.prototype.$mfeKey;
+    if (!mfeKey) {
+        return null;
+    }
+
+    return `${mfeKey}-portal-${guid}`;
+}
+
 /**
  * Get target DOM Node
  * @param {(Node|string|Boolean)} [node=document.body] DOM Node, CSS selector, or Boolean
  * @return {Node} The target that the el will be appended to
  */
-function getTarget (node) {
-    if (node === void 0) {
-        node = document.body
+function getTarget (node, guid) {
+    if (node !== void 0 && node !== true) {
+        return document.querySelector(node);
     }
-    if (node === true) { return document.body }
-    return node instanceof window.Node ? node : document.querySelector(node)
+
+    const mfeKey = Vue.prototype.$mfeKey;
+    if (mfeKey && guid) {
+        const portalElement = getMfePortalElement(guid);
+        if (portalElement) {
+            return portalElement;
+        }
+
+        return createMfePortalElement(guid);
+    }
+    
+    return document.body;
 }
+
+// if (node === void 0) {
+//     node = document.body
+// }
+// if (node === true) {
+//     return document.body
+// }
+
+// if (node instanceof window.Node) {
+//     return node;
+// }
+
+// return document.querySelector(node);
 
 const directive = {
     inserted (el, { value }, vnode) {
         if ( el.dataset && el.dataset.transfer !== 'true') return false;
+
+        // Create a unique identifier so we can target individual body elements
+        // if required.
+        const guid = nanoid();
+        el.dataset.guid = guid;
+
         el.className = el.className ? el.className + ' v-transfer-dom' : 'v-transfer-dom';
         const parentNode = el.parentNode;
         if (!parentNode) return;
@@ -25,20 +86,22 @@ const directive = {
 
         if (value !== false) {
             parentNode.replaceChild(home, el); // moving out, el is no longer in the document
-            getTarget(value).appendChild(el); // moving into new place
+            getTarget(value, guid).appendChild(el); // moving into new place
             hasMovedOut = true
         }
         if (!el.__transferDomData) {
             el.__transferDomData = {
                 parentNode: parentNode,
                 home: home,
-                target: getTarget(value),
+                target: getTarget(value, guid),
                 hasMovedOut: hasMovedOut
             }
         }
     },
     componentUpdated (el, { value }) {
         if ( el.dataset && el.dataset.transfer !== 'true') return false;
+
+        const guid = el.dataset.guid;
         // need to make sure children are done updating (vs. `update`)
         const ref$1 = el.__transferDomData;
         if (!ref$1) return;
@@ -51,20 +114,26 @@ const directive = {
             // remove from document and leave placeholder
             parentNode.replaceChild(home, el);
             // append to target
-            getTarget(value).appendChild(el);
-            el.__transferDomData = Object.assign({}, el.__transferDomData, { hasMovedOut: true, target: getTarget(value) });
+            getTarget(value, guid).appendChild(el);
+            el.__transferDomData = Object.assign({}, el.__transferDomData, { hasMovedOut: true, target: getTarget(value, guid) });
         } else if (hasMovedOut && value === false) {
             // previously moved, coming back home
             parentNode.replaceChild(el, home);
-            el.__transferDomData = Object.assign({}, el.__transferDomData, { hasMovedOut: false, target: getTarget(value) });
+            el.__transferDomData = Object.assign({}, el.__transferDomData, { hasMovedOut: false, target: getTarget(value, guid) });
         } else if (value) {
             // already moved, going somewhere else
-            getTarget(value).appendChild(el);
+            getTarget(value, guid).appendChild(el);
         }
     },
     unbind (el) {
         if (el.dataset && el.dataset.transfer !== 'true') return false;
         el.className = el.className.replace('v-transfer-dom', '');
+
+        const portalElement = getMfePortalElement(el.dataset.guid);
+        if (portalElement) {
+            portalElement.remove();
+        }
+
         const ref$1 = el.__transferDomData;
         if (!ref$1) return;
         if (el.__transferDomData.hasMovedOut === true) {

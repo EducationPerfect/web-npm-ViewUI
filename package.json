@@ -50,6 +50,7 @@
         "element-resize-detector": "^1.2.0",
         "js-calendar": "^1.2.3",
         "lodash.throttle": "^4.1.1",
+        "nanoid": "^3.1.30",
         "popper.js": "^1.14.6",
         "tinycolor2": "^1.4.1",
         "v-click-outside-x": "^3.7.1"
