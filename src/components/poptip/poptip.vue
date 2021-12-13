@@ -17,7 +17,7 @@
                 :class="popperClasses"
                 :style="styles"
                 ref="popper"
-                v-show="visible"
+                v-show="!disabled && (visible || always)"
                 @click="handleTransferClick"
                 @mouseenter="handleMouseenter"
                 @mouseleave="handleMouseleave"
@@ -123,7 +123,11 @@
                 default () {
                     return !this.$IVIEW ? false : this.$IVIEW.capture;
                 }
-            }
+            },
+            always: {
+                type: Boolean,
+                default: false
+            },
         },
         data () {
             return {
