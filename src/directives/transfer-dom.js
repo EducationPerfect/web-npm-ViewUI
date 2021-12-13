@@ -51,19 +51,6 @@ function getTarget (node, guid) {
     return document.body;
 }
 
-// if (node === void 0) {
-//     node = document.body
-// }
-// if (node === true) {
-//     return document.body
-// }
-
-// if (node instanceof window.Node) {
-//     return node;
-// }
-
-// return document.querySelector(node);
-
 const directive = {
     inserted (el, { value }, vnode) {
         if ( el.dataset && el.dataset.transfer !== 'true') return false;
