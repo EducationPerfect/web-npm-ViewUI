@@ -25,12 +25,7 @@ function getMfePortalElement(guid) {
 }
 
 function getMfePortalId(guid) {
-    const mfeKey = Vue.prototype.$mfeKey;
-    if (!mfeKey) {
-        return null;
-    }
-
-    return `${mfeKey}-portal-${guid}`;
+    return `mfe-portal-${guid}`;
 }
 
 /**
