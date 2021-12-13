@@ -6,11 +6,11 @@ import Vue from "vue";
 
 function createMfePortalElement(guid) {
     const mfeKey = Vue.prototype.$mfeKey;
-    const portalId = getMfePortalId(guid);
-    if (!mfeKey || !portalId) {
+    if (!mfeKey) {
         return null;
     }
 
+    const portalId = getMfePortalId(guid);
     const newPortal = document.createElement("div");
     newPortal.id = portalId;
     newPortal.classList = [mfeKey];
