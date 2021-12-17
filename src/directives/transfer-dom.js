@@ -4,12 +4,7 @@
 import { nanoid } from "nanoid";
 import Vue from "vue";
 
-function createMfePortalElement(guid) {
-    const mfeKey = Vue.prototype.$mfeKey;
-    if (!mfeKey) {
-        return null;
-    }
-
+function createMfePortalElement(guid, mfeKey) {
     const portalId = getMfePortalId(guid);
     const newPortal = document.createElement("div");
     newPortal.id = portalId;
@@ -39,13 +34,13 @@ function getTarget (node, guid) {
     }
 
     const mfeKey = Vue.prototype.$mfeKey;
-    if (mfeKey && guid) {
+    if (guid && mfeKey) {
         const portalElement = getMfePortalElement(guid);
         if (portalElement) {
             return portalElement;
         }
 
-        return createMfePortalElement(guid);
+        return createMfePortalElement(guid, mfeKey);
     }
     
     return document.body;
