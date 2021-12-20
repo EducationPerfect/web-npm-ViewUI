@@ -170,6 +170,8 @@ const install = function(Vue, opts = {}) {
         Vue.component(key, iview[key]);
     });
 
+    Vue.prototype.$mfeKey = opts.mfeKey;
+
     Vue.prototype.$IVIEW = {
         size: opts.size || '',
         transfer: 'transfer' in opts ? opts.transfer : '',

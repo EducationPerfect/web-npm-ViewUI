@@ -1,6 +1,6 @@
 {
     "name": "@educationperfect/view-design",
-    "version": "4.2.0-beta.1",
+    "version": "4.3.0",
     "title": "ViewUI",
     "description": "A high quality UI components Library with Vue.js",
     "homepage": "http://www.iviewui.com",
@@ -50,6 +50,7 @@
         "element-resize-detector": "^1.2.0",
         "js-calendar": "^1.2.3",
         "lodash.throttle": "^4.1.1",
+        "nanoid": "^3.1.30",
         "popper.js": "^1.14.6",
         "tinycolor2": "^1.4.1",
         "v-click-outside-x": "^3.7.1"
@@ -119,6 +120,9 @@
         "webpack": "^3.11.0",
         "webpack-dev-server": "^2.11.3",
         "webpack-merge": "^3.0.0"
+    },
+    "resolutions": {
+        "graceful-fs": "4.2.2"
     },
     "engines": {
         "node": ">=8.9.1",

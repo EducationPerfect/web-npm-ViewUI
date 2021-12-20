@@ -12,7 +12,8 @@ import locale from '../src/locale/lang/zh-CN';
 Vue.use(VueRouter);
 Vue.use(iView, {
     locale,
-    capture: true
+    capture: true,
+    mfeKey: "mfeResourceLibrary",
 });
 
 // 开启debug模式
